@@ -23,14 +23,6 @@ unsigned int runtime::measurement::GrossRtval_t::MeasureStart(timecapsules tc)
      return usec_u64;
 }
 
-// std::chrono::time_point<std::chrono::_V2::steady_clock, std::chrono::duration<long int, std::ratio<1, 1000000000> > > runtime::measurement::GrossRtval_t::MeasureStart()
-// {                                                                                                                                                     
-
-//     auto usec = std::chrono::steady_clock::now();
-
-    
-//     return usec;
-// }
 unsigned int runtime::measurement::GrossRtval_t::MeasureEnd()
 {
 

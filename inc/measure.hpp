@@ -17,7 +17,13 @@ typedef enum timecapsules
    MAX_NUM_TIME_CAPSULES
 }timecapsules;
 
-
+typedef struct mRuntime_t
+{
+    unsigned int start;
+    unsigned int end;
+    unsigned int StartMeasure;
+    timecapsules tcval;
+};
 namespace runtime
 {
 namespace measurement
