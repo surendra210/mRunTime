@@ -15,11 +15,5 @@ runtime::measurement::SharedMemory::SharedMemory()
       
       ptr = region.get_address();
 }
-// void* runtime::measurement::SharedMemory::GetMemoryPtr()
-// {return ptr;}
-// runtime::measurement::SharedMemory* runtime::measurement::SharedMemory::getInstance() 
-// {
-//       if (!Instance)
-//       Instance = new runtime::measurement::SharedMemory;
-//       return Instance;
-// }
+void* runtime::measurement::SharedMemory::GetMemoryPtr()
+{return ptr;}
