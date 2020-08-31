@@ -5,8 +5,8 @@ find_package(Boost 1.56 REQUIRED COMPONENTS
                 date_time filesystem iostreams)
 
 
-include_directories(${CMAKE_SOURCE_DIR}/rtm/inc)
-include_directories(${CMAKE_SOURCE_DIR}/rtm/src)
+include_directories(${CMAKE_SOURCE_DIR}/inc)
+include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIR})
 
