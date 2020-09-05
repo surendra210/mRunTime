@@ -4,6 +4,8 @@ Description : Runtime measurement utility
 */
 
 #include "iostream"
+#include <numeric>
+#include <chrono>
 #include <boost/interprocess/shared_memory_object.hpp>
 #include <boost/interprocess/mapped_region.hpp>
 #include <boost/interprocess/creation_tags.hpp>
@@ -35,14 +37,23 @@ typedef enum timecapsules
   MAX_NUM_TIME_CAPSULES
 } timecapsules;
 
-typedef struct mRuntime_t
+typedef struct mRuntimeGross_t
+{
+  std::chrono::time_point<std::chrono::steady_clock> start;
+  std::chrono::time_point<std::chrono::steady_clock> end;
+  unsigned int StartMeasure;
+  std::chrono::duration<uint64_t, nano>  GrossRuntime;
+  timecapsules tcval;
+};
+typedef struct mRuntimeNet_t
 {
   unsigned int start;
   unsigned int end;
   unsigned int StartMeasure;
+  unsigned int GrossRuntime;
   timecapsules tcval;
 };
-unsigned int START   = 0;
+unsigned int START = 0;
 unsigned int STARTED = 1;
 namespace runtime
 {
@@ -76,7 +87,8 @@ namespace runtime
 
     public:
       //User Interfaces
-      void *GetMemoryPtr();
+      void *GetMemoryPtrGross();
+      void *GetMemoryPtrNet();
       void *getInstance()
       {
         if (!Instance)
@@ -85,13 +97,13 @@ namespace runtime
       }
 
     private:
-      void *ptr;
+      void *ptrGross=NULL;
+      void *ptrNet=NULL;
 
     protected:
       //Constructor
       SharedMemory();
     };
-
     class RtvalGeneric_t
     {
 
@@ -100,7 +112,9 @@ namespace runtime
       RtvalGeneric_t();
       virtual unsigned int MeasureStart();
       virtual unsigned int MeasureEnd();
-      virtual unsigned int Measure(timecapsules);
+      virtual std::chrono::duration<uint64_t, nano>  MeasureGross(timecapsules);
+      virtual unsigned int  MeasureNet(timecapsules);
+      
       int MonitorForValStart();
       int MonitorForValEnd();
 
@@ -119,12 +133,13 @@ namespace runtime
       //User Interfaces
       GrossRtval_t();
       unsigned int MeasureStart(timecapsules tc);
-      unsigned int Measure(timecapsules tc);
       unsigned int MeasureEnd();
+
+      std::chrono::duration<uint64_t, nano>  MeasureGross(timecapsules tc);
 
     private:
     };
-    class NetRtval_t : public RtvalGeneric_t
+    class NetRtval_t : public RtvalGeneric_t, public SharedMemory
     {
 
     public:
@@ -132,6 +147,8 @@ namespace runtime
       NetRtval_t();
       unsigned int MeasureStart();
       unsigned int MeasureEnd();
+
+      unsigned int  MeasureNet(timecapsules);
 
     private:
     };
